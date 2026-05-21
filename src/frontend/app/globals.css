@@ -1,0 +1,29 @@
+@import "highlight.js/styles/github-dark.css";
+
+html.dark .markdown-body pre {
+  background: var(--chakra-colors-bg-emphasized);
+}
+
+html:not(.dark) .hljs {
+  background: #f6f8fa !important;
+}
+
+html.dark .hljs {
+  background: #1e1e1e !important;
+}
+
+.markdown-body {
+  word-wrap: break-word;
+}
+
+.markdown-body pre code.hljs {
+  display: block;
+  padding: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+html,
+body {
+  min-height: 100%;
+}

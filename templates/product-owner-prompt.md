@@ -45,7 +45,13 @@ Como Product Owner, preciso que você:
 ### Para Análise de Requisitos
 ```
 Analise os seguintes requisitos e crie user stories detalhadas:
-[Inserir requisitos aqui]
+- as funcionalidades do sistema estão escritos no output "feature-suggestions" do agente de feature-suggester;
+- o sistema sera feito com o framework next do react;
+- para interagir com o banco de dados sera usado a api routes do next com prisma orm;
+- para estilização usar o framework chackra ui v3;
+- sistema com visual bonito, intuitivo, profissional e moderno;
+- adaptar os layouts para visualização mobile, desktop e tablet;
+- o banco de dados sera o neon;
 
 Foque em:
 - Identificar personas

@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Note {
+  id          String   @id @default(cuid())
+  title       String   @db.VarChar(200)
+  content     String   @db.Text
+  publishedAt DateTime @default(now())
+  pinned      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tags        Tag[]
+
+  @@index([publishedAt(sort: Desc)])
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique @db.VarChar(50)
+  slug      String   @unique @db.VarChar(50)
+  color     String?  @db.VarChar(7)
+  createdAt DateTime @default(now())
+  notes     Note[]
+
+  @@index([slug])
+}
