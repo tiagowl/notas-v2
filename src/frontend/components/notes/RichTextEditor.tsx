@@ -63,7 +63,6 @@ export function RichTextEditor({
   minHeight = "280px",
 }: RichTextEditorProps) {
   const editor = useEditor({
-    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         heading: { levels: [1, 2, 3] },
@@ -81,7 +80,6 @@ export function RichTextEditor({
       }),
     ],
     content: value,
-    contentType: "markdown",
     onUpdate: ({ editor: ed }) => {
       const md = ed.storage.markdown.getMarkdown();
       onChange(md);
@@ -97,7 +95,7 @@ export function RichTextEditor({
     if (!editor) return;
     const current = editor.storage.markdown.getMarkdown();
     if (value.trim() === current.trim()) return;
-    editor.commands.setContent(value || "", { contentType: "markdown" });
+    editor.commands.setContent(value || "");
   }, [editor, value]);
 
   useEffect(() => {

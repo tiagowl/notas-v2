@@ -59,7 +59,7 @@ export function TagSidebar({
           </Button>
         ))}
       </Stack>
-      <Button asChild variant="link" size="sm" mt={6} colorPalette="blue">
+      <Button asChild variant="ghost" size="sm" mt={6} colorPalette="blue">
         <Link href="/tags">Gerenciar tags</Link>
       </Button>
     </Box>

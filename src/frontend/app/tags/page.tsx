@@ -165,7 +165,7 @@ export default function TagsPage() {
         </>
       )}
 
-      <Button asChild variant="link" mt={8} colorPalette="blue">
+      <Button asChild variant="ghost" mt={8} colorPalette="blue">
         <Link href="/notas">← Voltar para notas</Link>
       </Button>
 
