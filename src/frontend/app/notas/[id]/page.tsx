@@ -5,9 +5,11 @@ import {
   Breadcrumb,
   Button,
   Flex,
+  Grid,
   Heading,
   HStack,
   IconButton,
+  Stack,
   Text,
 } from "@chakra-ui/react";
 import Link from "next/link";
@@ -84,7 +86,7 @@ export default function NotaDetalhePage() {
 
   return (
     <AppShell showSidebar={false}>
-      <Breadcrumb.Root mb={4} size="sm">
+      <Breadcrumb.Root mb={4} size="sm" display={{ base: "none", md: "block" }}>
         <Breadcrumb.List>
           <Breadcrumb.Item>
             <Breadcrumb.Link asChild>
@@ -98,59 +100,145 @@ export default function NotaDetalhePage() {
         </Breadcrumb.List>
       </Breadcrumb.Root>
 
-      <Button asChild variant="ghost" size="sm" mb={4} px={0}>
+      <Button asChild variant="ghost" size="sm" mb={{ base: 3, md: 4 }} px={0} minH="44px">
         <Link href="/notas">
           <LuArrowLeft />
-          Voltar para notas
+          Voltar
         </Link>
       </Button>
 
-      <Flex justify="space-between" align="flex-start" flexWrap="wrap" gap={4} mb={6}>
-        <Box flex="1" minW={0}>
-          <Heading size="2xl" mb={2}>
-            {note.title}
-          </Heading>
-          <Text color="fg.muted" mb={3}>
-            {formatNoteDate(note.publishedAt)}
-          </Text>
-          <HStack gap={2} flexWrap="wrap">
-            {note.tags.map((t) => (
-              <TagBadge
-                key={t.id}
-                tag={t}
-                onClick={() => router.push(`/notas?tag=${t.slug}`)}
-              />
-            ))}
+      <Stack gap={{ base: 4, md: 0 }} mb={6}>
+        <Flex
+          direction={{ base: "column", lg: "row" }}
+          justify="space-between"
+          align={{ base: "stretch", lg: "flex-start" }}
+          gap={4}
+        >
+          <Box flex="1" minW={0}>
+            <Heading
+              size={{ base: "xl", md: "2xl" }}
+              mb={2}
+              lineHeight="short"
+              wordBreak="break-word"
+            >
+              {note.title}
+            </Heading>
+            <Text color="fg.muted" fontSize={{ base: "sm", md: "md" }} mb={3}>
+              {formatNoteDate(note.publishedAt)}
+            </Text>
+            {note.tags.length > 0 && (
+              <HStack gap={2} flexWrap="wrap">
+                {note.tags.map((t) => (
+                  <TagBadge
+                    key={t.id}
+                    tag={t}
+                    onClick={() => router.push(`/notas?tag=${t.slug}`)}
+                  />
+                ))}
+              </HStack>
+            )}
+          </Box>
+
+          <HStack
+            gap={2}
+            w={{ base: "full", lg: "auto" }}
+            flexShrink={0}
+            display={{ base: "none", lg: "flex" }}
+          >
+            <IconButton
+              aria-label="Modo leitura focada"
+              variant="outline"
+              onClick={() => setZenMode(true)}
+            >
+              <LuExpand />
+            </IconButton>
+            <Button asChild variant="outline" size="sm">
+              <Link href={`/notas/${note.id}/editar`}>
+                <LuPencil />
+                Editar
+              </Link>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              colorPalette="red"
+              onClick={() => setDeleteOpen(true)}
+            >
+              <LuTrash2 />
+              Excluir
+            </Button>
           </HStack>
-        </Box>
-        <HStack>
-          <IconButton
-            aria-label="Modo leitura focada"
+        </Flex>
+
+        <Grid
+          templateColumns="repeat(3, 1fr)"
+          gap={2}
+          w="full"
+          display={{ base: "grid", lg: "none" }}
+          pt={1}
+          borderTopWidth="1px"
+          borderColor="border.subtle"
+        >
+          <Button
             variant="outline"
+            size="md"
+            flexDirection="column"
+            gap={1}
+            h="auto"
+            py={3}
+            minH="56px"
             onClick={() => setZenMode(true)}
           >
-            <LuExpand />
-          </IconButton>
-          <Button asChild variant="outline" size="sm">
+            <LuExpand size={18} />
+            <Text fontSize="xs" fontWeight="medium">
+              Foco
+            </Text>
+          </Button>
+          <Button
+            asChild
+            variant="outline"
+            size="md"
+            flexDirection="column"
+            gap={1}
+            h="auto"
+            py={3}
+            minH="56px"
+          >
             <Link href={`/notas/${note.id}/editar`}>
-              <LuPencil />
-              Editar
+              <LuPencil size={18} />
+              <Text fontSize="xs" fontWeight="medium">
+                Editar
+              </Text>
             </Link>
           </Button>
           <Button
             variant="outline"
-            size="sm"
+            size="md"
             colorPalette="red"
+            flexDirection="column"
+            gap={1}
+            h="auto"
+            py={3}
+            minH="56px"
             onClick={() => setDeleteOpen(true)}
           >
-            <LuTrash2 />
-            Excluir
+            <LuTrash2 size={18} />
+            <Text fontSize="xs" fontWeight="medium">
+              Excluir
+            </Text>
           </Button>
-        </HStack>
-      </Flex>
+        </Grid>
+      </Stack>
 
-      <Box borderTopWidth="1px" borderColor="border.subtle" pt={8}>
-        <MarkdownContent content={note.content} />
+      <Box
+        borderTopWidth="1px"
+        borderColor="border.subtle"
+        pt={{ base: 6, md: 8 }}
+        px={{ base: 0, md: 0 }}
+      >
+        <Box maxW={{ base: "100%", md: "65ch" }} mx={{ md: "auto" }}>
+          <MarkdownContent content={note.content} maxW="100%" />
+        </Box>
       </Box>
 
       <ConfirmDialog
