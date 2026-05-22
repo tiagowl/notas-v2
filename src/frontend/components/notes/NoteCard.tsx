@@ -29,15 +29,17 @@ export function NoteCard({ note, onTogglePin, onDelete }: NoteCardProps) {
           <HStack gap={0} flexShrink={0}>
             {onTogglePin && (
               <IconButton
-                aria-label={note.pinned ? "Desafixar" : "Fixar"}
+                aria-label={note.pinned ? "Remover destaque" : "Marcar destaque"}
+                aria-pressed={note.pinned}
                 size="xs"
                 variant="ghost"
+                color={note.pinned ? "orange.500" : "fg.muted"}
                 onClick={(e) => {
                   e.preventDefault();
                   onTogglePin();
                 }}
               >
-                <LuPin color={note.pinned ? "orange" : undefined} />
+                <LuPin />
               </IconButton>
             )}
             {onDelete && (

@@ -256,7 +256,14 @@ function NotesPageContent() {
                 <NoteCard
                   key={note.id}
                   note={note}
-                  onTogglePin={() => togglePin(note.id).catch(() => {})}
+                  onTogglePin={() =>
+                    togglePin(note.id).catch((e) =>
+                      toaster.create({
+                        title: e instanceof Error ? e.message : "Erro ao atualizar destaque",
+                        type: "error",
+                      })
+                    )
+                  }
                 />
               ))}
             </Grid>
@@ -267,7 +274,14 @@ function NotesPageContent() {
                   key={note.id}
                   note={note}
                   showPreview
-                  onTogglePin={() => togglePin(note.id).catch(() => {})}
+                  onTogglePin={() =>
+                    togglePin(note.id).catch((e) =>
+                      toaster.create({
+                        title: e instanceof Error ? e.message : "Erro ao atualizar destaque",
+                        type: "error",
+                      })
+                    )
+                  }
                   onDelete={() => setDeleteNoteId(note.id)}
                 />
               ))}

@@ -30,10 +30,11 @@ export function NoteListItem({ note, showPreview, onTogglePin, onDelete }: NoteL
         <HStack gap={0} flexShrink={0}>
           {onTogglePin && (
             <IconButton
-              aria-label={note.pinned ? "Desafixar" : "Fixar"}
+              aria-label={note.pinned ? "Remover destaque" : "Marcar destaque"}
+              aria-pressed={note.pinned}
               size="xs"
               variant="ghost"
-              color={note.pinned ? "orange.solid" : "fg.muted"}
+              color={note.pinned ? "orange.500" : "fg.muted"}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();

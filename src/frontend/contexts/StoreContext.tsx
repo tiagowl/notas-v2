@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { api, type NoteSummary, type TagWithCount } from "@/lib/api/client";
+import { reorderNotesAfterPinToggle } from "@/lib/store/note-filters";
 import type {
   CreateNoteInput,
   CreateTagInput,
@@ -129,13 +130,32 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     [refreshAll]
   );
 
-  const togglePin = useCallback(
-    async (id: string) => {
-      await api.notes.togglePin(id);
-      await refreshAll();
-    },
-    [refreshAll]
-  );
+  const togglePin = useCallback(async (id: string) => {
+    let snapshot: NoteSummary[] = [];
+
+    setNotes((prev) => {
+      snapshot = prev;
+      return reorderNotesAfterPinToggle(prev, id);
+    });
+
+    try {
+      const updated = await api.notes.togglePin(id);
+      setNotes((prev) =>
+        prev.map((n) =>
+          n.id === id
+            ? {
+                ...n,
+                pinned: updated.pinned,
+                updatedAt: updated.updatedAt,
+              }
+            : n
+        )
+      );
+    } catch (e) {
+      setNotes(snapshot);
+      throw e;
+    }
+  }, []);
 
   const listTags = useCallback(() => tags, [tags]);
 

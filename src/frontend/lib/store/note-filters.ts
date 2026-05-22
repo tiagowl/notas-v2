@@ -40,6 +40,25 @@ export function filterAndSortNotes(
   return result;
 }
 
+/** Reordena após alternar fixação: fixadas no topo, ordem relativa preservada em cada grupo */
+export function reorderNotesAfterPinToggle<T extends { id: string; pinned: boolean }>(
+  notes: T[],
+  toggledId: string
+): T[] {
+  const toggled = notes.find((n) => n.id === toggledId);
+  if (!toggled) return notes;
+
+  const next = { ...toggled, pinned: !toggled.pinned };
+  const rest = notes.filter((n) => n.id !== toggledId);
+  const pinned = rest.filter((n) => n.pinned);
+  const unpinned = rest.filter((n) => !n.pinned);
+
+  if (next.pinned) {
+    return [next, ...pinned, ...unpinned];
+  }
+  return [...pinned, ...unpinned, next];
+}
+
 export function attachTagsToNote(note: Note, tags: Tag[]) {
   return {
     ...note,
