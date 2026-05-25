@@ -23,12 +23,15 @@ function fromBase64Url(value: string): string {
   return decoder.decode(bytes);
 }
 
-function getSecretKey(): Uint8Array {
+function getSecretKey(): Uint8Array<ArrayBuffer> {
   const secret = process.env.AUTH_SECRET;
   if (!secret || secret.length < 16) {
     throw new Error("AUTH_SECRET deve ter pelo menos 16 caracteres");
   }
-  return encoder.encode(secret);
+  const encoded = encoder.encode(secret);
+  const keyMaterial = new Uint8Array(encoded.length);
+  keyMaterial.set(encoded);
+  return keyMaterial;
 }
 
 async function hmacSign(data: string): Promise<string> {
