@@ -12,8 +12,9 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { LuClipboardPaste, LuMenu, LuPlus, LuSearch } from "react-icons/lu";
+import { LuClipboardPaste, LuLogOut, LuMenu, LuPlus, LuSearch } from "react-icons/lu";
 import { ColorModeButton } from "@/components/ui/ColorModeButton";
+import { toaster } from "@/components/ui/toaster";
 
 interface HeaderProps {
   search: string;
@@ -34,6 +35,16 @@ export function Header({
 }: HeaderProps) {
   const router = useRouter();
   const appName = process.env.NEXT_PUBLIC_APP_NAME ?? "Notas v2";
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+      router.replace("/login");
+      router.refresh();
+    } catch {
+      toaster.create({ title: "Erro ao sair", type: "error" });
+    }
+  };
   const headerRef = useRef<HTMLDivElement>(null);
   const [mobileHeaderHeight, setMobileHeaderHeight] = useState(0);
 
@@ -130,6 +141,14 @@ export function Header({
                 <LuPlus />
                 Nova
               </Button>
+              <IconButton
+                aria-label="Sair"
+                variant="ghost"
+                size="sm"
+                onClick={handleLogout}
+              >
+                <LuLogOut />
+              </IconButton>
               <ColorModeButton />
             </Flex>
           </Flex>

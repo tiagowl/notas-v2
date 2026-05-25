@@ -9,6 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { usePathname } from "next/navigation";
 import { api, type NoteSummary, type TagWithCount } from "@/lib/api/client";
 import { reorderNotesAfterPinToggle } from "@/lib/store/note-filters";
 import type {
@@ -46,6 +47,9 @@ interface StoreContextValue {
 const StoreContext = createContext<StoreContextValue | null>(null);
 
 export function StoreProvider({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const isLoginPage = pathname === "/login";
+
   const [notes, setNotes] = useState<NoteSummary[]>([]);
   const [tags, setTags] = useState<TagWithCount[]>([]);
   const [ready, setReady] = useState(false);
@@ -83,6 +87,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, [loadTags, loadNotes]);
 
   useEffect(() => {
+    if (isLoginPage) {
+      setReady(true);
+      setLoading(false);
+      return;
+    }
+
     (async () => {
       try {
         await refreshAll();
@@ -93,7 +103,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         setLoading(false);
       }
     })();
-  }, [refreshAll]);
+  }, [refreshAll, isLoginPage]);
 
   const getNote = useCallback(async (id: string) => {
     try {
